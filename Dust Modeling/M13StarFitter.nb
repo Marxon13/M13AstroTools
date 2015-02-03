@@ -1,0 +1,648 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 9.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[     22595,        639]
+NotebookOptionsPosition[     21131,        586]
+NotebookOutlinePosition[     21507,        603]
+CellTagsIndexPosition[     21464,        600]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Dust Modeling Function", "Section",
+ CellChangeTimes->{{3.611405511310483*^9, 3.611405518036695*^9}, {
+  3.611496750240603*^9, 3.6114967542786903`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"dust", "[", 
+   RowBox[{"x_", ",", " ", "t_", ",", " ", "dn_", ",", "b_"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"(", 
+    RowBox[{
+     FractionBox["dn", 
+      SuperscriptBox["x", "4"]], 
+     FractionBox["1", 
+      RowBox[{
+       SuperscriptBox["E", 
+        FractionBox[
+         RowBox[{"1.4388", "*", 
+          SuperscriptBox["10", "4"]}], 
+         RowBox[{"t", "*", "x"}]]], "-", "1"}]]}], ")"}], "*", 
+   SuperscriptBox["x", "b"]}]}]], "Input",
+ CellChangeTimes->{{3.611403440340147*^9, 3.611403502681114*^9}, {
+  3.611403606006912*^9, 3.611403655156241*^9}, {3.611403855163553*^9, 
+  3.611403881585681*^9}, {3.611404243345388*^9, 3.611404245111662*^9}, {
+  3.6114043091937*^9, 3.611404311193698*^9}, {3.611405286052392*^9, 
+  3.6114052884439077`*^9}, {3.611405526787716*^9, 3.6114055351980047`*^9}, {
+  3.611408015506665*^9, 3.611408017152423*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Manipulate", "[", 
+  RowBox[{
+   RowBox[{"Plot", "[", 
+    RowBox[{
+     RowBox[{"dust", "[", 
+      RowBox[{"x", ",", "t", ",", " ", "dn", ",", "b"}], "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"x", ",", "0", ",", "7"}], "}"}]}], "]"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"t", ",", "1300"}], "}"}], ",", "1", ",", "3000", ",", "1"}], 
+    "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"dn", ",", 
+       RowBox[{"2.2", "*", 
+        SuperscriptBox["10", 
+         RowBox[{"-", "9"}]]}]}], "}"}], ",", "0", ",", 
+     RowBox[{"1", "*", 
+      SuperscriptBox["10", 
+       RowBox[{"-", "8"}]]}], ",", 
+     RowBox[{"1", "*", 
+      SuperscriptBox["10", 
+       RowBox[{"-", "10"}]]}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"b", ",", ".3"}], "}"}], ",", "0", ",", "1", ",", ".01"}], 
+    "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.611403534978837*^9, 3.611403619811079*^9}, {
+   3.611403696922504*^9, 3.611403841775063*^9}, {3.611403922714425*^9, 
+   3.611403949520954*^9}, 3.611404022133219*^9, {3.611404059605424*^9, 
+   3.611404092562441*^9}, {3.611404371201477*^9, 3.6114043825915613`*^9}, {
+   3.611405291131363*^9, 3.611405291578795*^9}, {3.611408021091024*^9, 
+   3.611408021993544*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Import Data", "Section",
+ CellChangeTimes->{{3.611405546941443*^9, 3.611405548347917*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"listTarget", " ", "=", " ", 
+   RowBox[{
+   "Import", "[", "\"\<Replace this with the path to the target data\>\"", 
+    "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"listTargetPrism", " ", "=", " ", 
+   RowBox[{
+   "Import", "[", "\"\<Replace this with the path to the prism data\>\"", 
+    "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"listStandard", " ", "=", " ", 
+    RowBox[{
+    "Import", "[", 
+     "\"\<Replace this with the path to the standard star data\>\"", "]"}]}], 
+   ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{"ListLogLogPlot", "[", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+    "listTarget", ",", " ", "listStandard", ",", " ", "listTargetPrism"}], 
+    "}"}], ",", " ", 
+   RowBox[{"PlotStyle", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{"Red", ",", " ", "Blue", ",", "Green"}], "}"}]}], ",", " ", 
+   RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}]}], "Input",
+ CellChangeTimes->{{3.611404508310408*^9, 3.611404542331503*^9}, {
+   3.611404622651135*^9, 3.611404642169963*^9}, {3.611405051569931*^9, 
+   3.6114050749284286`*^9}, {3.611405107045162*^9, 3.61140517046074*^9}, {
+   3.6114052343520107`*^9, 3.611405248524254*^9}, {3.611405555863324*^9, 
+   3.611405556413443*^9}, {3.611407936131537*^9, 3.6114079368029633`*^9}, 
+   3.6125235489985533`*^9, {3.614611849083742*^9, 3.614611868017774*^9}, 
+   3.614611907915908*^9, {3.614612298712488*^9, 3.614612314798822*^9}, {
+   3.631623218697343*^9, 3.63162326742458*^9}, {3.631623840315887*^9, 
+   3.631623863570475*^9}, {3.631625956075284*^9, 3.631626059139868*^9}, {
+   3.631800217921418*^9, 3.631800220169179*^9}, {3.631802253326994*^9, 
+   3.631802281861659*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Create the standard model", "Section",
+ CellChangeTimes->{{3.611407947642601*^9, 3.611407949465137*^9}, 
+   3.611490038336877*^9, {3.611496767654652*^9, 3.611496772166491*^9}}],
+
+Cell["Smooth the standard data", "Text",
+ CellChangeTimes->{{3.6114083682557*^9, 3.611408370246221*^9}, {
+   3.611488480728306*^9, 3.611488482390777*^9}, 3.611490038337099*^9}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"sdata", " ", "=", " ", 
+   RowBox[{"Drop", "[", 
+    RowBox[{"listStandard", ",", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", 
+       RowBox[{"Length", "[", "listStandard", "]"}], ",", "2"}], "}"}]}], 
+    "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"sdata", "=", 
+   RowBox[{"Drop", "[", 
+    RowBox[{"sdata", ",", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", 
+       RowBox[{"Length", "[", "sdata", "]"}], ",", "2"}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"sdata", "=", 
+   RowBox[{"Drop", "[", 
+    RowBox[{"sdata", ",", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", 
+       RowBox[{"Length", "[", "sdata", "]"}], ",", "2"}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"sdata", "=", 
+   RowBox[{"Drop", "[", 
+    RowBox[{"sdata", ",", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", 
+       RowBox[{"Length", "[", "sdata", "]"}], ",", "2"}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Length", "[", "sdata", "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"sdata", " ", "=", 
+   RowBox[{"MovingAverage", "[", 
+    RowBox[{"sdata", ",", "20"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"ListLogLogPlot", "[", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"listStandard", ",", " ", "sdata"}], "}"}], ",", " ", 
+   RowBox[{"PlotStyle", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{"Blue", ",", " ", "Red"}], "}"}]}]}], 
+  "]"}], "\[IndentingNewLine]"}], "Input",
+ CellChangeTimes->{{3.6114083732084312`*^9, 3.611408487908613*^9}, {
+   3.6114085202695217`*^9, 3.611408544171556*^9}, {3.611487641187293*^9, 
+   3.611487644488913*^9}, {3.611487798205748*^9, 3.611487894194199*^9}, {
+   3.611487979067663*^9, 3.611487979347104*^9}, {3.611488379046636*^9, 
+   3.611488450194414*^9}, {3.611488508457905*^9, 3.6114885124964533`*^9}, 
+   3.611490038337232*^9, {3.611495048663801*^9, 3.611495104765286*^9}}],
+
+Cell["Create the interpolating ", "Text",
+ CellChangeTimes->{{3.6114968502733097`*^9, 3.611496854175796*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"Clear", "[", "standardFunction", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"standardFunction", "=", 
+  RowBox[{"Interpolation", "[", "sdata", "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"xmin", "=", 
+   RowBox[{
+    RowBox[{"standardFunction", "[", "\"\<Domain\>\"", "]"}], "[", 
+    RowBox[{"[", 
+     RowBox[{"1", ",", "1"}], "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"xmax", "=", 
+   RowBox[{
+    RowBox[{"standardFunction", "[", "\"\<Domain\>\"", "]"}], "[", 
+    RowBox[{"[", 
+     RowBox[{"1", ",", "2"}], "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"sfPlot", "=", 
+   RowBox[{"LogLogPlot", "[", 
+    RowBox[{
+     RowBox[{"standardFunction", "[", "x", "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"x", ",", "xmin", ",", "xmax"}], "}"}], ",", " ", 
+     RowBox[{"PlotStyle", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{"Thick", ",", " ", "Green"}], "}"}]}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Show", "[", 
+   RowBox[{
+    RowBox[{"ListLogLogPlot", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"listStandard", ",", " ", "sdata"}], "}"}], ",", " ", 
+      RowBox[{"PlotStyle", "\[Rule]", 
+       RowBox[{"{", 
+        RowBox[{"Blue", ",", " ", "Red"}], "}"}]}]}], "]"}], ",", "sfPlot"}], 
+   "]"}], " "}], "\[IndentingNewLine]"}], "Input",
+ CellChangeTimes->{{3.6114969525606213`*^9, 3.61149701208722*^9}, {
+  3.622194485714188*^9, 3.622194545220052*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Create the target model", "Section",
+ CellChangeTimes->{{3.611496787688856*^9, 3.611496807792609*^9}}],
+
+Cell["Smooth the target data", "Text",
+ CellChangeTimes->{{3.61148849455998*^9, 3.611488498262559*^9}, 
+   3.611490038346815*^9}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"tdata", " ", "=", " ", 
+   RowBox[{"Drop", "[", 
+    RowBox[{"listTarget", ",", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", 
+       RowBox[{"Length", "[", "listTarget", "]"}], ",", "2"}], "}"}]}], 
+    "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"tdata", " ", "=", " ", 
+   RowBox[{"Drop", "[", 
+    RowBox[{"tdata", ",", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", 
+       RowBox[{"Length", "[", "tdata", "]"}], ",", "2"}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"tdata", " ", "=", " ", 
+   RowBox[{"Drop", "[", 
+    RowBox[{"tdata", ",", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", 
+       RowBox[{"Length", "[", "tdata", "]"}], ",", "2"}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"tdata", " ", "=", " ", 
+   RowBox[{"Drop", "[", 
+    RowBox[{"tdata", ",", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", 
+       RowBox[{"Length", "[", "tdata", "]"}], ",", "2"}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Length", "[", "tdata", "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"tdata", " ", "=", 
+   RowBox[{"MovingAverage", "[", 
+    RowBox[{"tdata", ",", "30"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"p1", "=", 
+  RowBox[{"ListLogLogPlot", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"listTarget", ",", " ", "tdata"}], "}"}], ",", " ", 
+    RowBox[{"PlotStyle", "\[Rule]", 
+     RowBox[{"{", 
+      RowBox[{"Blue", ",", " ", "Red"}], "}"}]}]}], "]"}]}]}], "Input",
+ CellChangeTimes->{{3.611488521929203*^9, 3.611488577934424*^9}, 
+   3.611490038347063*^9, {3.611493836232205*^9, 3.611493850790267*^9}, {
+   3.611495120000079*^9, 3.6114951509711123`*^9}, {3.611496513181611*^9, 
+   3.611496516538335*^9}, {3.6146119432624397`*^9, 3.614611954336767*^9}, {
+   3.614612349279458*^9, 3.614612367426043*^9}}],
+
+Cell["Create the interpolating  function", "Text",
+ CellChangeTimes->{{3.6114968502733097`*^9, 3.611496854175796*^9}, {
+  3.631800474816345*^9, 3.6318004763512383`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"Clear", "[", "targetFunction", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"targetFunction", "=", 
+  RowBox[{"Interpolation", "[", "tdata", "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"xminT", "=", 
+   RowBox[{
+    RowBox[{"targetFunction", "[", "\"\<Domain\>\"", "]"}], "[", 
+    RowBox[{"[", 
+     RowBox[{"1", ",", "1"}], "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"xmaxT", "=", 
+   RowBox[{
+    RowBox[{"targetFunction", "[", "\"\<Domain\>\"", "]"}], "[", 
+    RowBox[{"[", 
+     RowBox[{"1", ",", "2"}], "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"tfPlot", "=", 
+   RowBox[{"LogLogPlot", "[", 
+    RowBox[{
+     RowBox[{"targetFunction", "[", "x", "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"x", ",", "xminT", ",", "xmaxT"}], "}"}], ",", " ", 
+     RowBox[{"PlotStyle", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{"Thick", ",", " ", "Green"}], "}"}]}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Show", "[", 
+   RowBox[{
+    RowBox[{"ListLogLogPlot", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"listTarget", ",", " ", "tdata"}], "}"}], ",", " ", 
+      RowBox[{"PlotStyle", "\[Rule]", 
+       RowBox[{"{", 
+        RowBox[{"Blue", ",", " ", "Red"}], "}"}]}]}], "]"}], ",", "tfPlot"}], 
+   "]"}], " "}], "\[IndentingNewLine]"}], "Input",
+ CellChangeTimes->{{3.6114969525606213`*^9, 3.61149701208722*^9}, {
+  3.622194485714188*^9, 3.622194545220052*^9}, {3.6318004790331287`*^9, 
+  3.6318005334621983`*^9}, {3.631800935405407*^9, 3.631800937204298*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Scale the target data", "Section",
+ CellChangeTimes->{{3.6114970339087353`*^9, 3.611497042523033*^9}, {
+  3.63180037101167*^9, 3.631800374938129*^9}}],
+
+Cell["Scale the target data to the prism data", "Text",
+ CellChangeTimes->{{3.631800379275063*^9, 3.631800392873464*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"tScaleModel", "[", 
+     RowBox[{"s_", ",", "x_"}], "]"}], ":=", 
+    RowBox[{
+     RowBox[{"targetFunction", "[", "x", "]"}], "*", "s"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{"Manipulate", "[", "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"Show", "[", 
+    RowBox[{
+     RowBox[{"LogLogPlot", "[", 
+      RowBox[{
+       RowBox[{"tScaleModel", "[", 
+        RowBox[{"s", ",", "x"}], "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"x", ",", "xminT", ",", "xmaxT"}], "}"}], ",", 
+       RowBox[{"PlotStyle", "\[Rule]", "Blue"}]}], "]"}], ",", 
+     RowBox[{"ListLogLogPlot", "[", 
+      RowBox[{"listTargetPrism", ",", 
+       RowBox[{"PlotStyle", "\[Rule]", "Green"}]}], "]"}]}], "]"}], ",", 
+   "\[IndentingNewLine]", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"s", ",", "1.0"}], "}"}], ",", ".5", ",", "2.0"}], "}"}]}], 
+  "]"}]}], "Input",
+ CellChangeTimes->{{3.631800414082323*^9, 3.631800435818303*^9}, {
+  3.631800586269294*^9, 3.631800686801918*^9}, {3.6318007239952393`*^9, 
+  3.631800774727478*^9}, {3.6318008225831537`*^9, 3.6318008503257303`*^9}, {
+  3.6318008830378838`*^9, 3.631801102143673*^9}}],
+
+Cell[BoxData[
+ RowBox[{"targetScale", "=", "1.058`"}]], "Input",
+ CellChangeTimes->{{3.6318011332223043`*^9, 3.631801158845257*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Create the function to fit", "Section",
+ CellChangeTimes->{{3.6114970339087353`*^9, 3.611497042523033*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"model", "[", 
+    RowBox[{
+    "x_", ",", " ", "t_", ",", " ", "dn_", ",", " ", "b_", ",", "sn_"}], 
+    "]"}], ":=", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"standardFunction", "[", "x", "]"}], "*", "sn"}], ")"}], " ", 
+    "+", " ", 
+    RowBox[{"dust", "[", 
+     RowBox[{"x", ",", "t", ",", "dn", ",", "b"}], "]"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"model", "[", 
+   RowBox[{"1", ",", "1300", ",", 
+    RowBox[{"2.2", "*", 
+     SuperscriptBox["10", 
+      RowBox[{"-", "9"}]]}], ",", ".3", ",", ".15"}], "]"}], "//", "N", " ", 
+  RowBox[{"(*", "Test", "*)"}]}]}], "Input",
+ CellChangeTimes->{{3.611407972824492*^9, 3.611408039976215*^9}, {
+   3.611408088799358*^9, 3.611408094101054*^9}, {3.611488610070447*^9, 
+   3.61148861270949*^9}, {3.611488730338928*^9, 3.611488789639654*^9}, {
+   3.611489941363305*^9, 3.61148994914675*^9}, 3.611490038362949*^9, {
+   3.611497048388402*^9, 3.611497058540401*^9}, {3.622196496909285*^9, 
+   3.622196497955364*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Manipulate", "[", "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"plot1", " ", "=", " ", 
+     RowBox[{"LogLogPlot", "[", 
+      RowBox[{
+       RowBox[{"model", "[", 
+        RowBox[{"x", ",", "t", ",", "dn", ",", "b", ",", "sn"}], "]"}], ",", 
+       " ", 
+       RowBox[{"{", 
+        RowBox[{"x", ",", "xmin", ",", "xmax"}], "}"}], ",", " ", 
+       RowBox[{"PlotStyle", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{"Red", ",", " ", "Thick"}], "}"}]}], ",", " ", 
+       RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}]}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{"plot2", " ", "=", " ", 
+     RowBox[{"ListLogLogPlot", "[", 
+      RowBox[{
+       RowBox[{"listTarget", "*", "targetScale"}], ",", 
+       RowBox[{"PlotStyle", "\[Rule]", "Blue"}], ",", 
+       RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}]}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{"Show", "[", 
+     RowBox[{"plot2", ",", "plot1", ",", 
+      RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}]}], ",", 
+   "\[IndentingNewLine]", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"t", ",", "1300"}], "}"}], ",", "1", ",", "2000", ",", "1"}], 
+    "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"dn", ",", 
+       RowBox[{"2.2", "*", 
+        SuperscriptBox["10", 
+         RowBox[{"-", "9"}]]}]}], "}"}], ",", "0", ",", 
+     RowBox[{"1.0", "*", 
+      SuperscriptBox["10", 
+       RowBox[{"-", "8"}]]}], ",", 
+     RowBox[{"0.1", "*", 
+      SuperscriptBox["10", 
+       RowBox[{"-", "10"}]]}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"b", ",", ".37"}], "}"}], ",", "0", ",", "2", ",", ".01"}], 
+    "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"sn", ",", ".158"}], "}"}], ",", "0", ",", "2", ",", ".001"}], 
+    "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.61149004809207*^9, 3.611490111148584*^9}, {
+   3.611490274307383*^9, 3.611490447942092*^9}, {3.611493321180489*^9, 
+   3.611493324538662*^9}, 3.6114952189459953`*^9, 3.6114952547740183`*^9, 
+   3.612523588627466*^9, {3.612523982576618*^9, 3.612523983285956*^9}, {
+   3.614612376263019*^9, 3.614612378029676*^9}, {3.622195076819324*^9, 
+   3.622195082578045*^9}, {3.631801172117236*^9, 3.631801175129406*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Trim data to keep in range. Without constraints", "Subsection",
+ CellChangeTimes->{{3.611498801040339*^9, 3.6114988145894327`*^9}, {
+  3.611498919762786*^9, 3.6114989338025703`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"dropAmount", " ", "=", "40"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"data", "=", 
+    RowBox[{"Drop", "[", 
+     RowBox[{
+      RowBox[{"Drop", "[", 
+       RowBox[{
+        RowBox[{"tdata", "*", "targetScale"}], ",", "dropAmount"}], "]"}], 
+      ",", 
+      RowBox[{"-", "dropAmount"}]}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{"fit", "=", 
+  RowBox[{"FindFit", "[", 
+   RowBox[{"data", ",", 
+    RowBox[{"model", "[", 
+     RowBox[{"x", ",", "t", ",", "dn", ",", "b", ",", "sn"}], "]"}], ",", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"t", ",", "1836"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"dn", ",", 
+        RowBox[{"4.0", "*", 
+         RowBox[{"10", "^", 
+          RowBox[{"-", "10"}]}]}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"b", ",", "0.66`"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"sn", ",", "0.152`"}], "}"}]}], "}"}], ",", "x"}], 
+   "]"}]}]}], "Input",
+ CellChangeTimes->{{3.631801513445376*^9, 3.6318015291875687`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"plot1", " ", "=", " ", 
+   RowBox[{"LogLogPlot", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"model", "[", 
+       RowBox[{"x", ",", "t", ",", "dn", ",", "b", ",", "sn"}], "]"}], "/.", 
+      "fit"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{"x", ",", "xmin", ",", "xmax"}], "}"}], ",", " ", 
+     RowBox[{"PlotStyle", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{"Red", ",", " ", "Thick"}], "}"}]}], ",", 
+     RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"plot2", " ", "=", " ", 
+   RowBox[{"ListLogLogPlot", "[", 
+    RowBox[{
+     RowBox[{"listTarget", "*", "targetScale"}], ",", 
+     RowBox[{"PlotStyle", "\[Rule]", "Blue"}], ",", 
+     RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"plot3", "=", 
+   RowBox[{"ListLogLogPlot", "[", 
+    RowBox[{
+     RowBox[{"tdata", "*", "targetScale"}], ",", 
+     RowBox[{"PlotStyle", "\[Rule]", "Green"}], ",", 
+     RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Show", "[", 
+  RowBox[{"plot2", ",", "plot3", ",", "plot1", ",", 
+   RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}]}], "Input",
+ CellChangeTimes->{{3.611498851408884*^9, 3.611498853640358*^9}, {
+   3.611498915111486*^9, 3.6114989858282557`*^9}, 3.612523611387444*^9, {
+   3.612523771697112*^9, 3.612523786239005*^9}, {3.612523905635087*^9, 
+   3.612523920977334*^9}, {3.612524158107781*^9, 3.612524182366763*^9}, {
+   3.614612046257958*^9, 3.614612087135769*^9}, {3.614612490120613*^9, 
+   3.614612527970395*^9}, {3.631623321839909*^9, 3.631623326559198*^9}, {
+   3.631801184613153*^9, 3.6318011888782454`*^9}, {3.631801265435039*^9, 
+   3.63180126560264*^9}, {3.631801448264081*^9, 3.631801453815308*^9}, {
+   3.6318014852787743`*^9, 3.6318014929274607`*^9}, {3.631801582907303*^9, 
+   3.631801590147019*^9}}]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{754, 752},
+WindowMargins->{{177, Automatic}, {Automatic, 17}},
+ShowSelection->True,
+FrontEndVersion->"10.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (June 27, \
+2014)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[579, 22, 158, 2, 64, "Section"],
+Cell[740, 26, 895, 22, 70, "Input"],
+Cell[1638, 50, 1328, 37, 57, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[3003, 92, 96, 1, 64, "Section"],
+Cell[3102, 95, 1735, 38, 114, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[4874, 138, 182, 2, 64, "Section"],
+Cell[5059, 142, 176, 2, 30, "Text"],
+Cell[5238, 146, 1929, 51, 148, "Input"],
+Cell[7170, 199, 109, 1, 30, "Text"],
+Cell[7282, 202, 1484, 39, 148, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[8803, 246, 108, 1, 64, "Section"],
+Cell[8914, 249, 129, 2, 30, "Text"],
+Cell[9046, 253, 1859, 50, 131, "Input"],
+Cell[10908, 305, 169, 2, 30, "Text"],
+Cell[11080, 309, 1575, 40, 148, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[12692, 354, 156, 2, 64, "Section"],
+Cell[12851, 358, 121, 1, 30, "Text"],
+Cell[12975, 361, 1228, 32, 114, "Input"],
+Cell[14206, 395, 132, 2, 28, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[14375, 402, 113, 1, 64, "Section"],
+Cell[14491, 405, 1051, 27, 52, "Input"],
+Cell[15545, 434, 2307, 61, 163, "Input"],
+Cell[CellGroupData[{
+Cell[17877, 499, 188, 2, 44, "Subsection"],
+Cell[18068, 503, 1098, 33, 97, "Input"],
+Cell[19169, 538, 1934, 44, 114, "Input"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
