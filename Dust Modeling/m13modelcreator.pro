@@ -54,7 +54,6 @@ function minimumInRange, xArr, yArr, xrange
   yarray = yArr[xminbin : xmaxbin]
   ;Find the minimum value
   ymin = min(yarray)
-
   return, ymin
 
 end
@@ -63,44 +62,63 @@ end
 function minimumInArraysInRange, x1, y1, x2, y2, x3, y3, xrange
 
   ;Find Y Minimums
+  minarray = [ ]
   ymin1 = minimumInRange(x1, y1, xrange)
+  if finite(ymin1) eq 1 then begin
+    minarray = [minarray, [ymin1]]
+  endif
   ymin2 = minimumInRange(x2, y2, xrange)
+  if finite(ymin2) eq 1 then begin
+    minarray = [minarray, [ymin2]]
+  endif
   ymin3 = minimumInRange(x3, y3, xrange)
+  if finite(ymin3) eq 1 then begin
+    minarray = [minarray, [ymin3]]
+  endif
 
-  return, min([ymin1, ymin2, ymin3])
+  return, min(minarray)
 
 end
 
 ;Find the maximum y value in the given domain
 function maximumInRange, xArr, yArr, xrange
 
-;Find Y Maximum
-xminbin = value_locate(xArr, xrange[0])
-xmaxbin = value_locate(xArr, xrange[1])
-;Catch if a value is not found
-if xminbin eq -1 then begin
-  xminbin = 0;
-endif
-if xmaxbin eq -1 then begin
-  xmaxbin = size(xmaxbin, /n_dimensions)
-endif
-;Trim fstar to this sub array
-yarray = yArr[xminbin : xmaxbin]
-;Find the minimum value
-ymax = max(yarray)
-
-return, ymax
+  ;Find Y Maximum
+  xminbin = value_locate(xArr, xrange[0])
+  xmaxbin = value_locate(xArr, xrange[1])
+  ;Catch if a value is not found
+  if xminbin eq -1 then begin
+    xminbin = 0;
+  endif
+  if xmaxbin eq -1 then begin
+    xmaxbin = size(xmaxbin, /n_dimensions)
+  endif
+  ;Trim fstar to this sub array
+  yarray = yArr[xminbin : xmaxbin]
+  ;Find the minimum value
+  ymax = max(yarray)
+  return, ymax
 end
 
 ;find the maximum of three value sets in the given domain
 function maximumInArraysInRange, x1, y1, x2, y2, x3, y3, xrange
 
   ;Find Y Minimums
+  maxarray = [ ]
   ymin1 = maximumInRange(x1, y1, xrange)
+  if finite(ymin1) eq 1 then begin
+    maxarray = [maxarray, [ymin1]]
+  endif
   ymin2 = maximumInRange(x2, y2, xrange)
+  if finite(ymin2) eq 1 then begin
+    maxarray = [maxarray, [ymin2]]
+  endif
   ymin3 = maximumInRange(x3, y3, xrange)
+  if finite(ymin3) eq 1 then begin
+    maxarray = [maxarray, [ymin3]]
+  endif
 
-  return, max([ymin1, ymin2, ymin3])
+  return, max(maxarray)
 
 end
 
@@ -259,7 +277,9 @@ for smoothType = 0, 1 do begin
         yrange = thePlot.yrange
         yminimum = yrange[0]
       endif
-      thePlot.yrange = [yminimum - (yminimum / 10.0), ymaximum + (ymaximum / 10.0)]
+      spacing = (ymaximum - yminimum) / 20.0
+      fontSize = spacing
+      thePlot.yrange = [yminimum - (2 * spacing), ymaximum + (2 * spacing)]
       
       ;Add plot labels if necessary
       if plotType eq 0 then begin
@@ -271,21 +291,21 @@ for smoothType = 0, 1 do begin
         ymin1 = minimumInArraysInRange(wModel, lflModel, wStandard, lflStandard, wTarget, lflTarget, [0.8476, .8520])
         ymin2 = minimumInArraysInRange(wModel, lflModel, wStandard, lflStandard, wTarget, lflTarget, [0.8520, .8564])
         ymin3 = minimumInArraysInRange(wModel, lflModel, wStandard, lflStandard, wTarget, lflTarget, [0.8640, .8684])
-        ymin = min([ymin1, ymin2, ymin3])
+        ymin = min([ymin1, ymin2, ymin3]) - spacing
         
         x = [0.8498, 0.8498]
-        y = [ymin1 - (ymin1 / 20.0), ymin - (ymin / 20.0)]
+        y = [ymin1 - spacing, ymin - spacing]
         line1 = Polyline(x, y, /data, target = plot, color = "magenta", thick = 1.0)
         
         x = [0.8542,0.8542]
-        y = [ymin2 - (ymin2 / 20.0), ymin - (ymin / 20.0)]
+        y = [ymin2 - spacing, ymin - spacing]
         line2 = Polyline(x, y, /data, target = plot, color = "magenta", thick = 1.0)
         
         x = [0.8662,0.8662]
-        y = [ymin3 - (ymin3 / 20.0), ymin - (ymin / 20.0)]
+        y = [ymin3 - spacing, ymin - spacing]
         line3 = Polyline(x, y, /data, target = plot, color = "magenta", thick = 1.0)
         
-        text1 = text(0.852, ymin - (ymin / 20.0) - (ymin / 10.0), 'Ca II', /data, font_name = 'Helvetica', font_size=14, color = "magenta")
+        text1 = text(0.852, ymin - spacing - fontSize, 'Ca II', /data, font_name = 'Helvetica', font_size=14, color = "magenta")
 
         ; [O I]
         print, '    [O I]...'
@@ -293,9 +313,9 @@ for smoothType = 0, 1 do begin
         ymin = minimumInArraysInRange(wModel, lflModel, wStandard, lflStandard, wTarget, lflTarget, [0.8424, .8468])
  
         x=[0.8446,0.8446]
-        y = [ymin - (ymin / 10.0), ymin - (ymin / 20.0)]
+        y = [ymin - spacing, ymin - (2 * spacing)]
         line4 = Polyline(x, y, /data, target = plot, color = "teal", thick = 1.0)
-        text2 = text(0.83, ymin - (ymin / 10.0) - (ymin / 20.0), '[O I]', /data, font_name = 'Helvetica', font_size=14, color = "teal")
+        text2 = text(0.83, ymin - (2 * spacing) - fontSize, '[O I]', /data, font_name = 'Helvetica', font_size=14, color = "teal")
 
         ; H I
         print, '    H I...'
@@ -304,37 +324,38 @@ for smoothType = 0, 1 do begin
         ymin2 = minimumInArraysInRange(wModel, lflModel, wStandard, lflStandard, wTarget, lflTarget, [0.8995, .9039]) ;10
         ymin3 = minimumInArraysInRange(wModel, lflModel, wStandard, lflStandard, wTarget, lflTarget, [0.9209, .9253]) ;9
         ymin4 = minimumInArraysInRange(wModel, lflModel, wStandard, lflStandard, wTarget, lflTarget, [0.9526, .9570]) ;e
-        ymin = min([ymin1, ymin2, ymin3, ymin4])
+        ymin = min([ymin1, ymin2, ymin3, ymin4]) - spacing
         
         x=[0.8865, 0.8865]
-        y = [ymin1 - (ymin1 / 20.0), ymin - (ymin / 10.0)]
+        y = [ymin1 - spacing, ymin - spacing]
         line4 = Polyline(x, y, /data, target = plot, color = "purple", thick = 1.0)
-        text2 = text(0.882, ymin - (ymin / 10.0) - (ymin / 10.0), '11', /data, font_name = 'Helvetica', font_size=14, color = "purple")
+        text2 = text(0.882, ymin - spacing - fontSize, '11', /data, font_name = 'Helvetica', font_size=14, color = "purple")
 
         x=[0.9017, 0.9017]
-        y = [ymin2 - (ymin2 / 20.0), ymin - (ymin / 10.0)]
+        y = [ymin2 - spacing, ymin - spacing]
         line4 = Polyline(x, y, /data, target = plot, color = "purple", thick = 1.0)
-        text2 = text(0.897, ymin - (ymin / 10.0) - (ymin / 10.0), '10', /data, font_name = 'Helvetica', font_size=14, color = "purple")
+        text2 = text(0.897, ymin - spacing - fontSize, '10', /data, font_name = 'Helvetica', font_size=14, color = "purple")
         
         x=[0.9231, 0.9231]
-        y = [ymin3 - (ymin3 / 20.0), ymin - (ymin / 10.0)]
+        y = [ymin3 - spacing, ymin - spacing]
         line4 = Polyline(x, y, /data, target = plot, color = "purple", thick = 1.0)
-        text2 = text(0.922, ymin - (ymin / 10.0) - (ymin / 10.0), '9', /data, font_name = 'Helvetica', font_size=14, color = "purple")
+        text2 = text(0.922, ymin - spacing - fontSize, '9', /data, font_name = 'Helvetica', font_size=14, color = "purple")
         
         x=[0.9548, 0.9548]
-        y = [ymin4 - (ymin4 / 20.0), ymin - (ymin / 10.0)]
+        y = [ymin4 - spacing, ymin - spacing]
         line4 = Polyline(x, y, /data, target = plot, color = "purple", thick = 1.0)
-        text2 = text(0.953, ymin - (ymin / 10.0) - (ymin / 10.0), cggreek('epsilon', /ps), /data, font_name = 'Helvetica', font_size=14, color = "purple")
+        text2 = text(0.953, ymin - spacing - fontSize, cggreek('epsilon', /ps), /data, font_name = 'Helvetica', font_size=14, color = "purple")
 
-        text3 = text(.90, ymin - (ymin / 5.0) - (ymin / 10.0) , 'H I Paschen', /data, font_name = 'Helvetica', font_size=14, color = "purple")
+        text3 = text(.90, ymin - spacing - fontSize - fontSize , 'H I Paschen', /data, font_name = 'Helvetica', font_size=14, color = "purple")
         
         print, '    Completed labeling'
       endif
       
       if plotType eq 1 then begin
         print, '    Creating legend...'
+        xspacing = (thePlot.xrange[1] - thePlot.xrange[0]) / 20.0
         thelegend = legend(target = [targetwlfl, standardwlfl, plot1, plot2], $
-          position = [thePlot.xrange[1] - 0.6, ymaximum - (ymaximum / 10.0)], /data, /auto_text_color, font_name = 'Helvetica', font_size=14, horizontal_spacing = .05, shadow = 0, linestyle = 6, sample_width = 0.0)
+          position = [thePlot.xrange[1] - xspacing, ymaximum - spacing], /data, /auto_text_color, font_name = 'Helvetica', font_size=14, horizontal_spacing = .05, shadow = 0, linestyle = 6, sample_width = 0.0)
       endif
       
       ; Generate the save file path
@@ -351,7 +372,7 @@ for smoothType = 0, 1 do begin
         amountString = strcompress(smoothAmount, /remove_all)
       endif
 
-      outputFile = saveFolder + '/' + targetName + smoothString + amountString
+      outputFile = saveFolder + '/' + targetName + "_"  + targetObservationDate + smoothString + amountString
       
       print, '    Saving data...'
       
@@ -432,7 +453,7 @@ for smoothType = 0,1 do begin
         amountString = strcompress(smoothAmount, /remove_all)
       endif
 
-    inputFile = saveFolder + '/' + targetName + smoothString + amountString + '_modelParameters.sav'
+    inputFile = saveFolder + '/' + targetName + "_" + targetObservationDate + smoothString + amountString + '_modelParameters.sav'
 
     ;Load the file
     restore, inputFile
@@ -470,7 +491,7 @@ x=[0.989,0.989]
 line7 = polyline(x,y, /data, linestyle = '--', /overplot)
 
 ;Save the ratio comparison
-outputFile = saveFolder + '/' + targetName + "_Ratios.pdf"
+outputFile = saveFolder + '/' + targetName + targetObservationDate + "_Ratios.pdf"
 
 thePlot.save, outputFile, /close, width = 11, height = 8.5, /landscape
 
