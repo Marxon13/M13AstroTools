@@ -41,9 +41,10 @@ ftarget = lflTarget / w
 wl = [0.8449,0.849802,0.854209,0.8600754,0.866214,0.8752876,0.8865217,0.9017385,0.9231547,0.9548590,1.0052128,1.0941091,1.282159,2.166120,4.052262]
 n_lines = size(wl, /n_elements)
 
-;Create a model bump.
+;Create the x array for the chi-squared calculation
 bump = findgen(1000) / 10000 + 0.95
 print,'  start bump= ',strcompress(min(bump)),' | end bump= ',strcompress(max(bump))
+print, bump
 
 ;Stores the fluxes of the lines
 lineflux1 = fltarr(n_lines)
@@ -66,15 +67,14 @@ wl2(1) = wl(1) * (1.00 + 2.33e-3 * 0.8)
 wl1(2) = wl(2) * (1.00 - 2.33e-3 * 0.8)
 wl2(2) = wl(2) * (1.00 + 2.33e-3 * 0.8)
 
-;
+;The ranges used to calculate the chi squared fit. 1-2, and 3-4
 wc1 = [0.8410,0.8482,0.8516,0.8570,0.8618,0.8720,0.8830,0.8930,0.9150,0.9520,0.970,1.087,1.270,2.151,4.010]
 wc2 = [0.8429,0.8486,0.8524,0.8577,0.8630,0.8723,0.8845,0.8980,0.9190,0.9450,0.990,1.091,1.275,2.158,4.030]
-;
 wc3 = [0.8461,0.8516,0.857,0.8618,0.8689,0.8777,0.8885,0.894,0.926,0.9575,1.020,1.098,1.288,2.175,4.07]
 wc4 = [0.8463,0.8524,0.8577,0.863,0.872,0.8995,0.894,0.908,0.929,0.965,1.030,1.103,1.295,2.185,4.09]
 
-;
 bump_line = fltarr(n_lines)
+;Create the minimum and maximum plot widths for each line plot
 xmin = fltarr(n_lines)
 xmax = fltarr(n_lines)
 for i = 0, n_lines - 1 do begin
@@ -83,7 +83,7 @@ for i = 0, n_lines - 1 do begin
   print, '  xmin(', strcompress(i), ') = ', strcompress(xmin(i)), ' | xmax(', strcompress(i), ') = ', strcompress(xmax(i))
 endfor
 
-;
+;Calculate the positions of the legend text, as a legend background gets in the way
 starx = fltarr(n_lines)
 modelx = fltarr(n_lines)
 differx = fltarr(n_lines)
@@ -183,17 +183,18 @@ for m=0, n_lines-1 do begin
   theaxes[2].ticklen = .015
   theaxes[3].ticklen = .015
   
+  ;Place target name
   stary = (ymax - ymin) * 0.90 + ymin
   atext = text(starx(m), stary, targetName, /Data, font_name = 'Helvetica', font_size=13, color = 'black')
   
   print, '    Calculating comparison...'
   
-  ;Plot the model
-  aplot = plot(w, fmodel * bump(k), /overplot, color = 'red')
+  ;Plot the model, times the offset scaling
+  aplot = plot(w, fmodel * bump(bump_Line(m)), /overplot, color = 'red')
   modely = (ymax - ymin) * 0.85 + ymin
   atext = text(modelx(m), modely, 'Model', /data, font_name = 'Helvetica', font_size=13, color = 'red')
 
-  ;Plot the diffrence + Offset
+  ;Plot the diffrence + Offset scaling
   diff = ftarget - fmodel * bump_Line(m)
   aplot = plot(w, (diff + 0.5 * ymax + 0.25 * ymin), /overplot, color = 'blue')
   differy = (ymax - ymin) * 0.80 + ymin
