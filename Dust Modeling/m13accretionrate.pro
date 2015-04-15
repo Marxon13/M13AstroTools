@@ -55,7 +55,13 @@ Log_Lacc_PaBeta = 1.14 * (alog10(L_PaBeta / Lsun)) + 3.15          ; Muzerolle 1
 Lacc_PaBeta = 10^(Log_Lacc_PaBeta)
 print,'    Lacc Pa beta = ', strcompress(Lacc_PaBeta)
 
-Mdot_PaBeta = (3.155e7 / 1.99e30) * (Lacc_PaBeta * 3.85e26 * (starRadius * 6.96e8)) / (0.8 * G * starMass * 1.99e30)
+secondsPerYear = 3.155e7
+mSolarKg = 1.99e30
+radiatedEnergyWatts = 3.85e26 ;per 4.5 bio years?
+solarRadiusMeters = 6.96e8
+
+;Removed the .8, as there is a difference in accretion lumonicity and accretion column lumonicity: (3.155e7 / 1.99e30) * (Lacc_PaBeta * 3.85e26 * (starRadius * 6.96e8)) / (0.8 * G * starMass * 1.99e30)
+Mdot_PaBeta = (3.155e7 / 1.99e30) * (Lacc_PaBeta * 3.85e26 * (starRadius * 6.96e8)) / (G * starMass * 1.99e30)
 
 print, '    Mdot_PaBeta = ', strcompress( Mdot_PaBeta)
 
@@ -76,7 +82,8 @@ Log_Lacc_BrGamma = 1.26 * (alog10(L_BrGamma / Lsun)) + 4.43        ; Muzerolle 1
 Lacc_BrGamma = 10^(Log_Lacc_BrGamma)
 print,'    Lacc_BrGamma = ', strcompress(Lacc_BrGamma)
 
-Mdot_BrGamma = (3.155e7 / 1.99e30) * (Lacc_BrGamma * 3.85e26 * (starRadius * 6.96e8)) / (0.8 * G * starMass * 1.99e30)
+;Removed the .8, as there is a difference in accretion lumonicity and accretion column lumonicity: (3.155e7 / 1.99e30) * (Lacc_BrGamma * 3.85e26 * (starRadius * 6.96e8)) / (0.8 * G * starMass * 1.99e30)
+Mdot_BrGamma = (3.155e7 / 1.99e30) * (Lacc_BrGamma * 3.85e26 * (starRadius * 6.96e8)) / (G * starMass * 1.99e30)
 
 print, '    Mdot_BrGamma = ', strcompress(Mdot_BrGamma)
 
@@ -97,7 +104,8 @@ Log_Lacc_BrGamma2 = 0.9 * (alog10(L_BrGamma / Lsun) + 4.0) - 0.7   ; Calvet 2004
 Lacc_BrGamma2 = 10^(Log_Lacc_BrGamma2)
 print,'    Lacc Pa beta = ', strcompress(Lacc_PaBeta),' | Lacc_BrGamma = ', strcompress(Lacc_BrGamma),' | Lacc_BrGamma2 = ', strcompress(Lacc_BrGamma2)
 
-Mdot_BrGamma2 = (3.155e7 / 1.99e30) * (Lacc_BrGamma2 * 3.85e26 * (starRadius * 6.96e8)) / (0.8 * G * starMass * 1.99e30)
+;Removed the .8, as there is a difference in accretion lumonicity and accretion column lumonicity: (3.155e7 / 1.99e30) * (Lacc_BrGamma2 * 3.85e26 * (starRadius * 6.96e8)) / (0.8 * G * starMass * 1.99e30)
+Mdot_BrGamma2 = (3.155e7 / 1.99e30) * (Lacc_BrGamma2 * 3.85e26 * (starRadius * 6.96e8)) / (G * starMass * 1.99e30)
 
 print, '    Mdot_BrGamma2 = ', strcompress(Mdot_BrGamma2)
 

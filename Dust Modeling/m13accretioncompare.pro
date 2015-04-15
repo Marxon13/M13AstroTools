@@ -35,6 +35,8 @@ pro m13accretioncompare, filesArray, julianDatesArray, outputFolder
   print, '  Determining number of accretion rates to plot'
 
   n_rates = size(accretionArray, /N_ELEMENTS)
+  
+  accretionAverage = 0.0
 
   print, '  Generating plots...'
   for rateIndex = 0, n_rates - 1 do begin
@@ -123,5 +125,11 @@ pro m13accretioncompare, filesArray, julianDatesArray, outputFolder
     groupPlot.close
     scaledPlot.close
     
+    ;Calculate the average
+    print, "Average Mass Accretion Rate Using: ", sourceArray[rateIndex], " - ", methodArray[rateIndex], " : ", mean(dataArray), "Msolar / year"
+    accretionAverage = accretionAverage + mean(dataArray)
   endfor
+  
+  accretionAverage = accretionAverage / n_rates
+  print, "Average Accretion: ", accretionAverage, " Msolar / year"
 end
