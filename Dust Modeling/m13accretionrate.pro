@@ -96,13 +96,13 @@ fileArray[1] = 'Br Gamma - Muzerolle 1998'
 ;-----------------------------
 
 print, '  Calculating Br Gamma: Calvet 2004 AJ, 128, 1294'
-f_PaBeta = lineflux1(12)
-L_PaBeta = f_PaBeta * pi * (distance * pc)^2
-print,'    Flux Pa Beta = ', strcompress(f_PaBeta), ' | Lum Pa beta = ', strcompress(L_PaBeta)
+f_BrGamma = lineflux1(13)
+L_BrGamma = f_BrGamma * pi * (distance * pc)^2
+print,'    Flux Br Gamma = ', strcompress(f_BrGamma), ' | Lum Br Gamma = ', strcompress(L_BrGamma)
 
 Log_Lacc_BrGamma2 = 0.9 * (alog10(L_BrGamma / Lsun) + 4.0) - 0.7   ; Calvet 2004 AJ, 128, 1294
 Lacc_BrGamma2 = 10^(Log_Lacc_BrGamma2)
-print,'    Lacc Pa beta = ', strcompress(Lacc_PaBeta),' | Lacc_BrGamma = ', strcompress(Lacc_BrGamma),' | Lacc_BrGamma2 = ', strcompress(Lacc_BrGamma2)
+print,'    Lacc_BrGamma2 = ', strcompress(Lacc_BrGamma2)
 
 ;Removed the .8, as there is a difference in accretion lumonicity and accretion column lumonicity: (3.155e7 / 1.99e30) * (Lacc_BrGamma2 * 3.85e26 * (starRadius * 6.96e8)) / (0.8 * G * starMass * 1.99e30)
 Mdot_BrGamma2 = (3.155e7 / 1.99e30) * (Lacc_BrGamma2 * 3.85e26 * (starRadius * 6.96e8)) / (G * starMass * 1.99e30)

@@ -20,6 +20,28 @@
 ; MODIFICATION HISTORY:
 ;   Written by: Brandon McQuilkin, July 8th, 2014.
 ;-
+
+;Finds the values in the given range
+function binForRange, xArr, xrange
+
+  ;Find Y Minimum
+  xminbin = value_locate(xArr, xrange[0])
+  xmaxbin = value_locate(xArr, xrange[1])
+  ;Catch if a value is not found
+  if xminbin eq -1 then begin
+    print, "Minimum value not found, setting to 0."
+    xminbin = 0
+  endif
+  if xmaxbin eq -1 then begin
+    print, "Minimum value not found, setting to array length - 1. (" + size(xarr, /n_elements) - 1 + ")"
+    xmaxbin = size(xarr, /n_elements) - 1
+  endif
+  
+  return, [xminbin, xmaxbin]
+
+end
+
+
 pro m13autolines, inputFile, outputFolder
 
 ;Restore the file
@@ -42,9 +64,9 @@ wl = [0.8449,0.849802,0.854209,0.8600754,0.866214,0.8752876,0.8865217,0.9017385,
 n_lines = size(wl, /n_elements)
 
 ;Create the x array for the chi-squared calculation
-bump = findgen(1000) / 10000 + 0.95
+;bump = findgen(1000) / 10000 + 0.95
+bump = findgen(10000) / 10000 + 0.5
 print,'  start bump= ',strcompress(min(bump)),' | end bump= ',strcompress(max(bump))
-print, bump
 
 ;Stores the fluxes of the lines
 lineflux1 = fltarr(n_lines)
@@ -104,20 +126,33 @@ for m=0, n_lines-1 do begin
   
   print, '  Begining line: ' + line_label[m]
   print, '    Calculating Chi Squared...'
-  chisqr = fltarr(1000)
-
-  ;step through bump values
-  for j=0, 999 do begin 
+  bumpLength = size(bump, /n_elements)
+  chisqr = fltarr(bumpLength)
+  
+  ;Get the values in the specified ranges for the chi squared. This gets the indicies that meet the requirement
+  binRangeOne = binForRange(w, [wc1(m), wc2(m)])
+  binRangeTwo = binForRange(w, [wc3(m), wc4(m)])
+  print, "  Chi Squared Range: ", strcompress(binRangeOne), " + ", strcompress(binRangeTwo)
+  indiciesRangeOne = indgen(abs(binRangeOne(1) - binRangeOne(0)), START=min([binRangeOne(0), binRangeOne(1)]), INCREMENT=1)
+  indiciesRangeTwo = indgen(abs(binRangeTwo(1) - binRangeTwo(0)), START=min([binRangeTwo(0), binRangeTwo(1)]), INCREMENT=1)
+  
+  
+  for j=0, bumpLength - 1 do begin
     chi = 0.0
     ;get chi_squared differences between data & bumped model in continuum
-    for i = 0, n_elements(w)-1 do begin 
-      if (w(i) ge wc1(m) and w(i) le wc2(m)) or (w(i) ge wc3(m) and w(i) le wc4(m)) then chi = chi + ((ftarget(i) - fmodel(i) * bump(j)))^2
+    for i=0, size(indiciesRangeOne, /n_elements) - 1 do begin
+      index = indiciesRangeOne(i)
+      chi = chi + ((ftarget(index) - fmodel(index) * bump(j)))^2
+    endfor
+    for i=0, size(indiciesRangeTwo, /n_elements) - 1 do begin
+      index = indiciesRangeTwo(i)
+      chi = chi + ((ftarget(index) - fmodel(index) * bump(j)))^2
     endfor
     chisqr(j) = chi
   endfor
-
+  
   k = 0
-  for j = 0, 999 do begin
+  for j = 0, bumpLength - 1 do begin
     if (chisqr(j) eq min(chisqr)) then k = j
   endfor
 
@@ -127,9 +162,9 @@ for m=0, n_lines-1 do begin
   
   ; Create the plot object, Check to see we don't have nan plot ranges associated with no data.
   if finite(max(chisqr)) eq 1 then begin 
-  theplot = plot(bump, chisqr, font_size = 20, thick = 2.0, title = (targetName + ' - ' + line_label(m)), xrange = [0.95,1.05], yrange = [0,max(chisqr)*1.1], margin = [.25, .14, .12, .12], dimensions = [1280, 800])
+  theplot = plot(bump, chisqr, font_size = 20, thick = 2.0, title = (targetName + ' - ' + line_label(m)), xrange = [bump(0), bump(bumpLength - 1)], yrange = [0,max(chisqr)*1.1], margin = [.25, .14, .12, .12], dimensions = [1280, 800])
   endif else begin
-  theplot = plot(bump, chisqr, font_size = 20, thick = 2.0, title = (targetName + ' - ' + line_label(m)), xrange = [0.95,1.05], yrange = [0,1], margin = [.25, .14, .12, .12], dimensions = [1280, 800])
+  theplot = plot(bump, chisqr, font_size = 20, thick = 2.0, title = (targetName + ' - ' + line_label(m)), xrange = [bump(0), bump(bumpLength - 1)], yrange = [0,1], margin = [.25, .14, .12, .12], dimensions = [1280, 800])
   failtext = text(1.0, 0.5, 'No Data', /data, font_name = 'Helvetica', font_size=30, alignment = 0.5)
   endelse
   ;Set the title formatting
@@ -190,13 +225,17 @@ for m=0, n_lines-1 do begin
   print, '    Calculating comparison...'
   
   ;Plot the model, times the offset scaling
-  aplot = plot(w, fmodel * bump(bump_Line(m)), /overplot, color = 'red')
+  ;aplot = plot(w, fmodel * bump(bump_Line(m)), /overplot, color = 'red')
+  aplot = plot(w, fmodel * bump_Line(m), /overplot, color = 'red')
   modely = (ymax - ymin) * 0.85 + ymin
   atext = text(modelx(m), modely, 'Model', /data, font_name = 'Helvetica', font_size=13, color = 'red')
 
-  ;Plot the diffrence + Offset scaling
+  ;Calculate the difference
   diff = ftarget - fmodel * bump_Line(m)
-  aplot = plot(w, (diff + 0.5 * ymax + 0.25 * ymin), /overplot, color = 'blue')
+  ;Get the proper offset
+  offset = fTarget(binRangeOne(1)) - diff(binRangeOne(1))
+  ;Plot
+  aplot = plot(w, (diff + offset), /overplot, color = 'blue')
   differy = (ymax - ymin) * 0.80 + ymin
   atext = text(differx(m), differy, 'Difference + Offset', /data, font_name = 'Helvetica', font_size=13, color = 'blue')
 
@@ -205,7 +244,7 @@ for m=0, n_lines-1 do begin
   for i=1,n_elements(w)-2 do begin
     if w(i) ge wl1(m) and w(i) le wl2(m) then deltaw = (w(i+1) - w(i-1)) / 2.0
     if w(i) ge wl1(m) and w(i) le wl2(m) then f1 = f1 + diff(i) * deltaw
-    if w(i) ge wl1(m) and w(i) le wl2(m) then aplot = plot([w(i) , w(i)], [diff(i) + 0.5 * ymax + 0.25 * ymin, diff(i) + 0.5 * ymax + 0.25 * ymin], /overplot, color = 'black', symbol = '+')
+    if w(i) ge wl1(m) and w(i) le wl2(m) then aplot = plot([w(i) , w(i)], [diff(i) + offset, diff(i) + offset], /overplot, color = 'black', symbol = '+')
   endfor
 
   lineflux1(m) = f1
