@@ -72,7 +72,7 @@ pro m13bandflux, inputFile, outputFolder
   fluxLBand = fluxLBand / elementsLBand
   
   ;Save
-  save, filename = (outputFolder + '/bandflux.sav'), fluxJband, fluxHband, fluxKBand, fluxLband, wtarget, ftarget, targetName, targetObservationDate
+  save, filename = (outputFolder + '/bandflux.sav'), fluxJband, fluxHband, fluxKBand, fluxLband, wtarget, lfltarget, targetName, targetObservationDate
   print,'  Process Completed!'
   
 end
