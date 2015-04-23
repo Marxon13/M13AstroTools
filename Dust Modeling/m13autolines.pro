@@ -132,9 +132,13 @@ for m=0, n_lines-1 do begin
   ;Get the values in the specified ranges for the chi squared. This gets the indicies that meet the requirement
   binRangeOne = binForRange(w, [wc1(m), wc2(m)])
   binRangeTwo = binForRange(w, [wc3(m), wc4(m)])
-  print, "  Chi Squared Range: ", strcompress(binRangeOne), " + ", strcompress(binRangeTwo)
-  indiciesRangeOne = indgen(abs(binRangeOne(1) - binRangeOne(0)), START=min([binRangeOne(0), binRangeOne(1)]), INCREMENT=1)
-  indiciesRangeTwo = indgen(abs(binRangeTwo(1) - binRangeTwo(0)), START=min([binRangeTwo(0), binRangeTwo(1)]), INCREMENT=1)
+  print, "    Chi Squared Range: " + strcompress(binRangeOne) + " + " + strcompress(binRangeTwo)
+  length = abs(binRangeOne(1) - binRangeOne(0))
+  if length eq 0 then begin 
+    length = 1
+  endif  
+  indiciesRangeOne = indgen(length, START=min([binRangeOne(0), binRangeOne(1)]), INCREMENT=1)
+  indiciesRangeTwo = indgen(length, START=min([binRangeTwo(0), binRangeTwo(1)]), INCREMENT=1)
   
   
   for j=0, bumpLength - 1 do begin
