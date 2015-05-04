@@ -56,8 +56,26 @@ print, '  Loaded target data....'
 
 ;setup variables
 w = wTarget
-fmodel = lflModel / w
-ftarget = lflTarget / w
+;Convert to flambda from lambdaflambda
+fmodel = fltarr(n_elements(lflmodel))
+emodel = fltarr(n_elements(elflmodel))
+;fmodel = lflModel / w
+for i = 0, size(lflmodel, /n_elements) - 1 do begin
+
+  fmodel[i] = lflmodel[i] / w[i]
+  emodel[i] = abs(fmodel[i]) * sqrt((elflmodel[i] / lflmodel[i])^2 + (0 / w[i])^2)
+
+endfor
+
+ftarget = fltarr(n_elements(lfltarget))
+etarget = fltarr(n_elements(elfltarget))
+;ftarget = lflTarget / w
+for i = 0, size(lflmodel, /n_elements) - 1 do begin
+
+  ftarget[i] = lfltarget[i] / w[i]
+  etarget[i] = abs(ftarget[i]) * sqrt((elfltarget[i] / lfltarget[i])^2 + (0 / w[i])^2)
+
+endfor
 
 ;Wavelengths of the line locations
 wl = [0.8449,0.849802,0.854209,0.8600754,0.866214,0.8752876,0.8865217,0.9017385,0.9231547,0.9548590,1.0052128,1.0941091,1.282159,2.166120,4.052262]
@@ -70,7 +88,9 @@ print,'  start bump= ',strcompress(min(bump)),' | end bump= ',strcompress(max(bu
 
 ;Stores the fluxes of the lines
 lineflux1 = fltarr(n_lines)
+lineflux1Error = fltarr(n_lines)
 lineflux2 = fltarr(n_lines)
+lineflux2Error = fltarr(n_lines)
 
 ;Auto create the width of the lines
 wl1 = fltarr(n_lines)
@@ -139,7 +159,6 @@ for m=0, n_lines-1 do begin
   endif  
   indiciesRangeOne = indgen(length, START=min([binRangeOne(0), binRangeOne(1)]), INCREMENT=1)
   indiciesRangeTwo = indgen(length, START=min([binRangeTwo(0), binRangeTwo(1)]), INCREMENT=1)
-  
   
   for j=0, bumpLength - 1 do begin
     chi = 0.0
@@ -235,24 +254,50 @@ for m=0, n_lines-1 do begin
   atext = text(modelx(m), modely, 'Model', /data, font_name = 'Helvetica', font_size=13, color = 'red')
 
   ;Calculate the difference
-  diff = ftarget - fmodel * bump_Line(m)
+  diff = fltarr(n_elements(fTarget))
+  diffError = fltarr(n_elements(ftarget))
+  ;diff = ftarget - fmodel * bump_Line(m)
+  for i = 0, size(fTarget, /n_elements) - 1 do begin
+    
+    scaled = fmodel[i] * bump_Line(m)
+    scaledError = emodel[i] * bump_Line(m)
+    ;scaledError = abs(scaled) * sqrt((emodel[i] / fmodel[i])^2 + (0 / bump_line(m))^2) (Need to get the error for this)
+    
+    diff[i] = ftarget[i] - scaled
+    diffError[i] = sqrt(etarget[i]^2 + scaledError^2)
+    
+  endfor
+
   ;Get the proper offset
   offset = fTarget(binRangeOne(1)) - diff(binRangeOne(1))
   ;Plot
   aplot = plot(w, (diff + offset), /overplot, color = 'blue')
   differy = (ymax - ymin) * 0.80 + ymin
   atext = text(differx(m), differy, 'Difference + Offset', /data, font_name = 'Helvetica', font_size=13, color = 'blue')
+  ;aline = polyline([wl1(m) , wl2(m)], [fTarget(binRangeOne(1)), fTarget(binRangeOne(1))], /data, /overplot, color = 'blue')
 
-  f1=0
+  f1 = 0
+  f1error = 0
   ; method 1 - rectangle approximation
   for i=1,n_elements(w)-2 do begin
-    if w(i) ge wl1(m) and w(i) le wl2(m) then deltaw = (w(i+1) - w(i-1)) / 2.0
-    if w(i) ge wl1(m) and w(i) le wl2(m) then f1 = f1 + diff(i) * deltaw
-    if w(i) ge wl1(m) and w(i) le wl2(m) then aplot = plot([w(i) , w(i)], [diff(i) + offset, diff(i) + offset], /overplot, color = 'black', symbol = '+')
+    if w(i) ge wl1(m) and w(i) le wl2(m) then begin
+      
+      deltaw = (w(i+1) - w(i-1)) / 2.0
+      deltawerror = 0
+      
+      scale = diff(i) * deltaw
+      scaleError = abs(scale) * sqrt((diffError[i] / diff[i])^2 + (deltawerror / deltaw)^2)
+      
+      f1 = f1 + scale
+      f1error = sqrt(f1Error^2 + scaleError^2)
+      
+      aplot = plot([w(i) , w(i)], [diff(i) + offset, diff(i) + offset], /overplot, color = 'black', symbol = '+')
+    endif
   endfor
 
   lineflux1(m) = f1
-  print,'    line flux 1 = ', f1
+  lineflux1Error(m) = f1error
+  print,'    line flux 1 = ', strcompress(f1), "+-", strcompress(f1error)
 
   ;Print vertical lines
   x=[wl1(m),wl1(m)]
@@ -271,15 +316,36 @@ for m=0, n_lines-1 do begin
 
   ; method 2 - trapazoidal?
   f2 = 0
+  f2error = 0
   for i=1, n_elements(w)-2 do begin
-    if w(i) ge wl1(m) and w(i) le wl2(m) then deltaw = (w(i+1) - w(i-1)) / 2.0
-    if w(i) ge wl1(m) and w(i) le wl2(m) then f2 = f2 + ((diff(i) + diff(i-1)) / 2.0) * deltaw
+    if w(i) ge wl1(m) and w(i) le wl2(m) then begin
+      
+      deltaw = (w(i+1) - w(i-1)) / 2.0
+      deltawerror = 0
+      
+      tempDiff = (diff(i) + diff(i-1))
+      tempDiffError = sqrt(diffError[i]^2 + diffError[i-1]^2)
+      
+      averageDiff = tempDiff / 2.0
+      averageDiffError = abs(averageDiff) * sqrt((tempDiffError / tempDiff)^2 + (0 / 2.0)^2)
+      
+      timesDelta = averageDiff * deltaw
+      timesDeltaError = abs(timesDelta) * sqrt((averageDiffError / averageDiff)^2 + (deltawerror / deltaw)^2)
+      
+      f2 = f2 + timesDelta
+      f2error = sqrt(f2error^2 + timesDeltaError^2)
+      
+    endif
   endfor
 
   lineflux2(m) = f2
+  lineflux2error(m) = f2error
 
-  print, '    line flux 2 = ', strcompress(f2)
-  print, '    line flux = ', strcompress(((f1+f2)/2.0)), ' | METHOD DIFFERENCE = ', strcompress(abs((f1-f2))/2.0), ' | bump=', strcompress(bump_Line(m))
+  print, '    line flux 2 = ', strcompress(f2), "+-", strcompress(f2error)
+  
+  avgsum = f1+f2
+  avgsumerr = sqrt(f1error^2 + f2error^2)
+  print, '    line flux = ', strcompress((avgsum/2.0)), "+-", strcompress(avgsumerr / 2.0), ' | METHOD DIFFERENCE = ', strcompress(abs((f1-f2))/2.0), ' | bump=', strcompress(bump_Line(m))
 
 endfor
 
@@ -287,10 +353,22 @@ endfor
 wavelengths = wl
 wavelengthsMinX = wl1
 wavelengthsMaxX = wl2
-diff = fltarr(n_elements(f1))
-diff = (abs(f1 - f2) / 2.0)
-save, filename = (outputFolder + '/' + smoothDescription + ' - lineflux.sav'), lineflux1, lineflux2, wtarget, ftarget, fmodel, targetName, bump_Line, line_label, file_label, smoothDescription, wavelengths, wavelengthsMinX, wavelengthsMaxX, targetObservationDate
-print,'  Process Completed!'
 
+;Average
+linefluxAverage = fltarr(n_elements(lineflux1))
+linefluxAverageError = fltarr(n_elements(lineflux1))
+for i=0, n_elements(lineflux1)-1 do begin
+  sum = lineflux1[i] + lineflux2[i]
+  sumerror = sqrt(lineflux1error[i]^2 + lineflux2error[i]^2)
+  
+  linefluxaverage[i] = sum / 2.0
+  linefluxaverageerror[i] = sumerror / 2.0
+endfor
+
+outputFile = outputfolder + '/' + targetName + "_"  + targetObservationDate + "_" + smoothDescription + ' - lineflux.sav'
+
+save, filename = outputfile, lineflux1, lineflux1Error, lineflux2, lineflux2error, linefluxAverage, linefluxAverageError, wtarget, ftarget, fmodel, targetName, bump_Line, line_label, file_label, smoothDescription, wavelengths, wavelengthsMinX, wavelengthsMaxX, targetObservationDate
+print, '    Saved To: ', outputfile
+print,'  Process Completed!'
 
 end

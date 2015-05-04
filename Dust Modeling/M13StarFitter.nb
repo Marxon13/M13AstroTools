@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[     22595,        639]
-NotebookOptionsPosition[     21131,        586]
-NotebookOutlinePosition[     21507,        603]
-CellTagsIndexPosition[     21464,        600]
+NotebookDataLength[     22817,        644]
+NotebookOptionsPosition[     21318,        590]
+NotebookOutlinePosition[     21692,        607]
+CellTagsIndexPosition[     21649,        604]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -516,7 +516,7 @@ Cell[BoxData[{
       RowBox[{"-", "dropAmount"}]}], "]"}]}], ";"}], 
   "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
  RowBox[{"fit", "=", 
-  RowBox[{"FindFit", "[", 
+  RowBox[{"NonlinearModelFit", "[", 
    RowBox[{"data", ",", 
     RowBox[{"model", "[", 
      RowBox[{"x", ",", "t", ",", "dn", ",", "b", ",", "sn"}], "]"}], ",", 
@@ -534,7 +534,8 @@ Cell[BoxData[{
       RowBox[{"{", 
        RowBox[{"sn", ",", "0.152`"}], "}"}]}], "}"}], ",", "x"}], 
    "]"}]}]}], "Input",
- CellChangeTimes->{{3.631801513445376*^9, 3.6318015291875687`*^9}}],
+ CellChangeTimes->{{3.631801513445376*^9, 3.6318015291875687`*^9}, 
+   3.639301380745654*^9}],
 
 Cell[BoxData[{
  RowBox[{
@@ -544,7 +545,7 @@ Cell[BoxData[{
      RowBox[{
       RowBox[{"model", "[", 
        RowBox[{"x", ",", "t", ",", "dn", ",", "b", ",", "sn"}], "]"}], "/.", 
-      "fit"}], ",", " ", 
+      RowBox[{"fit", "[", "\"\<BestFitParameters\>\"", "]"}]}], ",", " ", 
      RowBox[{"{", 
       RowBox[{"x", ",", "xmin", ",", "xmax"}], "}"}], ",", " ", 
      RowBox[{"PlotStyle", "\[Rule]", 
@@ -580,12 +581,15 @@ Cell[BoxData[{
    3.631801184613153*^9, 3.6318011888782454`*^9}, {3.631801265435039*^9, 
    3.63180126560264*^9}, {3.631801448264081*^9, 3.631801453815308*^9}, {
    3.6318014852787743`*^9, 3.6318014929274607`*^9}, {3.631801582907303*^9, 
-   3.631801590147019*^9}}]
+   3.631801590147019*^9}, 3.639301399008004*^9}],
+
+Cell[BoxData[
+ RowBox[{"fit", "[", "\"\<ParameterTable\>\"", "]"}]], "Input"]
 }, Open  ]]
 }, Open  ]]
 },
 WindowSize->{754, 752},
-WindowMargins->{{177, Automatic}, {Automatic, 17}},
+WindowMargins->{{28, Automatic}, {Automatic, 0}},
 ShowSelection->True,
 FrontEndVersion->"10.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (June 27, \
 2014)",
@@ -634,11 +638,12 @@ Cell[14206, 395, 132, 2, 28, "Input"]
 Cell[CellGroupData[{
 Cell[14375, 402, 113, 1, 64, "Section"],
 Cell[14491, 405, 1051, 27, 52, "Input"],
-Cell[15545, 434, 2307, 61, 163, "Input"],
+Cell[15545, 434, 2307, 61, 146, "Input"],
 Cell[CellGroupData[{
 Cell[17877, 499, 188, 2, 44, "Subsection"],
-Cell[18068, 503, 1098, 33, 97, "Input"],
-Cell[19169, 538, 1934, 44, 114, "Input"]
+Cell[18068, 503, 1134, 34, 97, "Input"],
+Cell[19205, 539, 2005, 44, 97, "Input"],
+Cell[21213, 585, 77, 1, 28, "Input"]
 }, Open  ]]
 }, Open  ]]
 }

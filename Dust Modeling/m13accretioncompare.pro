@@ -37,6 +37,7 @@ pro m13accretioncompare, filesArray, julianDatesArray, outputFolder
   n_rates = size(accretionArray, /N_ELEMENTS)
   
   accretionAverage = 0.0
+  accretionError = 0.0
 
   print, '  Generating plots...'
   for rateIndex = 0, n_rates - 1 do begin
@@ -44,6 +45,7 @@ pro m13accretioncompare, filesArray, julianDatesArray, outputFolder
     ;Create the holding arrays for the data
     datesArray = strarr(n_files)
     dataArray = fltarr(n_files)
+    errorArray = fltarr(n_files)
     
     ;Load the data
     for fileIndex = 0, n_files - 1 do begin
@@ -52,6 +54,7 @@ pro m13accretioncompare, filesArray, julianDatesArray, outputFolder
 
       ;Add the mdots to the arrays
       dataArray[fileIndex] = accretionArray[rateIndex]
+      errorArray[fileIndex] = accretionErrorArray[rateIndex]
 
       ;Kill Nans
       if finite(dataArray[fileIndex]) eq 0 then dataArray[fileIndex] = 0
@@ -126,10 +129,24 @@ pro m13accretioncompare, filesArray, julianDatesArray, outputFolder
     scaledPlot.close
     
     ;Calculate the average
-    print, "Average Mass Accretion Rate Using: ", sourceArray[rateIndex], " - ", methodArray[rateIndex], " : ", mean(dataArray), "Msolar / year"
-    accretionAverage = accretionAverage + mean(dataArray)
+    rateAverage = 0.0
+    rateAverageError = 0.0
+    for i=0, n_elements(dataArray) - 1 do begin
+      
+      rateAverage = rateAverage + dataarray[i]
+      rateAverageError = sqrt(rateAverageError^2 + errorArray[i]^2) 
+      
+    endfor
+    
+    rateAverage = rateAverage / n_files
+    rateAverageError = rateAverageError / n_files
+    
+    print, "Average Mass Accretion Rate Using: ", sourceArray[rateIndex], " - ", methodArray[rateIndex], " : ", rateAverage, "+-", rateAverageError, "Msolar / year"
+    accretionAverage = accretionAverage + rateAverage
+    accretionError = sqrt(accretionError^2 + rateAverageError^2)
   endfor
   
   accretionAverage = accretionAverage / n_rates
-  print, "Average Accretion: ", accretionAverage, " Msolar / year"
+  accretionError = accretionError / n_rates
+  print, "Average Accretion: ", accretionAverage, "+-", accretionError, " Msolar / year"
 end

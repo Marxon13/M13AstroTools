@@ -32,6 +32,11 @@
 ; GAUSSIANONLY: Set this keyword to only use gaussian smoothing.
 ; DETAILPLOTONLY: Set this keyword to only create the detail plots.
 ; FULLPLOTONLY: Set this keyword to only create the full plots.
+; TERROR: The standard error in T
+; DUSTNORMERROR: The standard error in the dust norm
+; BETAERROR: The standard error in beta
+; STARNORMERROR: The standard error in the star norm
+; TARGETSCALEERROR: The standard error in the target's scale.
 ;
 ; MODIFICATION HISTORY:
 ;   Written by: Brandon McQuilkin, July 8th, 2014.
@@ -122,9 +127,10 @@ function maximumInArraysInRange, x1, y1, x2, y2, x3, y3, xrange
 
 end
 
-pro m13modelcreator, targetData, standardData, saveFolder, targetName, standardName, targetObservationDate, t, dustnorm, beta, starnorm, targetScale, OMITDATE = omitDate, BOXCARONLY = boxcarOnly, GAUSSIANONLY = gausianOnly, DETAILPLOTONLY = detailPlotOnly, FULLPLOTONLY = fullPlotOnly, KEEPPLOTSOPEN = keepPlotOpen
+pro m13modelcreator, targetData, standardData, saveFolder, targetName, standardName, targetObservationDate, t, dustnorm, beta, starnorm, targetScale, OMITDATE = omitDate, BOXCARONLY = boxcarOnly, GAUSSIANONLY = gausianOnly, DETAILPLOTONLY = detailPlotOnly, FULLPLOTONLY = fullPlotOnly, KEEPPLOTSOPEN = keepPlotOpen, TERROR = tError, DUSTNORMERROR = dustNormError, BETAERROR = betaError, STARNORMERROR = starNormError, TARGETSCALEERROR = targetScaleError
 
 print, 'Creating model for star: ' + targetName + ' - ' + targetObservationDate
+
 ;---------------Constants---------------
 ;Axis titles
 xtitle = '$\lambda (\mu m)$'
@@ -134,21 +140,33 @@ ytitle = '$\lambda F!D\lambda !N (\lambda W m!E-2!N \mu !5m!E-1!N)$'
 amountMin = 0
 amountMax = 10
 
-;---------------Read Data---------------
+;----------------Errors-----------------
+IF KEYWORD_SET(tError) eq 0 THEN tError = 0
+IF KEYWORD_SET(dustNormError) eq 0 THEN dustNormError = 0
+IF KEYWORD_SET(betaError) eq 0 THEN betaError = 0
+IF KEYWORD_SET(starNormError) eq 0 THEN starNormError = 0
+IF KEYWORD_SET(targetScaleError) eq 0 THEN targetScaleError = 0
 
-; Read in the data for the Target
-print, '  Loading target data....'
+;---------------Read Data---------------
+print, '  Loading target data'
 a = readfits(targetData)
 w = a(*, 0)
 f = a(*, 1)
 e = a(*, 2)
 wTarget = w
-lflTarget = w * f * targetScale
-elflTarget = w * e * targetScale
-print, '  Loaded'
+lflTarget = w * f
+elflTarget = w * e
+
+print, '  Applying the target scale'
+;Scale the flux, and calculate the error
+for i = 0, size(lflTarget, /n_elements) - 1 do begin
+  origValue = lflTarget[i]
+  lflTarget[i] = origValue * targetScale
+  elflTarget[i] = abs(lflTarget[i]) * sqrt((elflTarget[i] / origValue)^2 + (targetScaleError / targetScale)^2)
+endfor
 
 ; Now read in the spectrum of the spectral standard star
-print, '  Loading sandard data...'
+print, '  Loading sandard data'
 a = readfits(standardData)
 w = a(*, 0)
 f = a(*, 1)
@@ -166,13 +184,18 @@ gridterp, wTarget, wStandard, lflStandard, elflStandard, b, d
 
 ; Scale the standard to match the science target at the shortest wavelengths,
 ; that's where the dust emission will be smallest, since the dust is cooler than the stars
-lflStandard = lflStandard * starnorm
-elflStandard = elflStandard * starnorm
-print, '  Loaded'
+print, '  Scaling the standard data to match target'
+for i = 0, size(lflStandard, /n_elements) - 1 do begin
 
+  origValue = lflStandard[i]
+  lflStandard[i] = origValue * starnorm
+  elflStandard[i] = abs(lflStandard[i]) * sqrt((elflStandard[i] / origValue)^2 + (starNormError / starnorm)^2)
 
-;---------------Looping-----------------
+endfor
 
+;---------------Generate Plots-----------------
+
+print, '  Generating Plots'
 ; Iterate over the smooth types: boxcar (0), gaussian (1)
 for smoothType = 0, 1 do begin
   
@@ -198,7 +221,7 @@ for smoothType = 0, 1 do begin
         continue
       endif
       
-      print, '  Begin plotting...'
+      print, '  Begin plotting'
       
       ; Create the plot
       
@@ -256,18 +279,66 @@ for smoothType = 0, 1 do begin
       print, '    Creating model...'
       n = n_elements(wStandard)
       fbb = fltarr(n)
-      FBB(*) = (dustnorm) / (wStandard(*)^4) * (1. / (exp(1.4388e4 / (t * wStandard(*))) - 1.))
-      fbb = fbb * wStandard^beta
-      net = lflTemp + fbb
+      modelFlux = fltarr(n)
+      modelError = fltarr(n)
+      net = fltarr(n)
+      netError = fltarr(n)
+      
+      wavelengthError = 0.0
+      
+      ;Based off of this equation, it needed to be exploded to propigate error
+      ;fbb(*) = (dustnorm) / (wStandard(*)^4) * (1. / (exp(1.4388e4 / (t * wStandard(*))) - 1.))
+      ;fbb = fbb * wStandard^beta
+      ;net = lflTemp + fbb
+      
+      for i = 0, n - 1 do begin
+
+        ;l^4
+        lFourth = wStandard[i]^4
+        lFourthError = abs((lFourth*4.0*wavelengthError)/wStandard[i])
+        ;dn/l^4
+        dnDiv = dustNorm / lFourth
+        dnDivError = abs(dnDiv)*sqrt((dustNormError / dustNorm)^2 + (lFourthError / lFourth)^2)
+        ;tl
+        tl = t * wStandard[i]
+        tlError = abs(tl) * sqrt((tError / t)^2 + (wavelengthError / wStandard[i])^2)
+        ;const/tl
+        expexpValue = 1.4388e4 / tl
+        expexpValueError = abs(expexpValue) * sqrt((0 / 1.4388e4)^2 + (tlError / tl)^2)
+        ;exp
+        expValue = exp(expexpValue)
+        expError = abs(exp(expexpValueError))
+        ;exp - 1
+        minOne = expValue - 1
+        minOneError = sqrt((1^2 * expError^2) + (1^2 * 1^2))
+        ;1/exp - 1
+        oneOver = 1 / minOne
+        oneOverError = abs(oneOver) * sqrt((0 / 1)^2 + (minOneError / minOne)^2)
+        ;dnDiv * oneOver
+        dnDivOneOver = dnDiv * oneOver
+        dnDivOneOverError = abs(dnDivOneOver) * sqrt((dnDivError / dnDiv)^2 + (oneOverError / oneOver)^2)
+        ;l^b
+        lToB = wStandard[i]^beta
+        lToBError = abs(lToB) * sqrt(((beta / wStandard[i]) * wavelengthError)^2 + (alog(wStandard[i]) * betaError)^2)
+        ;dndivoneover * ltob
+        modelFlux[i] = dnDivOneOver * lToB
+        modelError[i] = abs(modelFlux[i]) * sqrt((dnDivOneOverError / dnDivOneOver)^2 + (lToBError / lToB)^2)
+        
+        net[i] = modelFlux[i] + lflTemp[i]
+        netError[i] = sqrt((1^2 * modelError[i]^2) + (1^2 * elflStandard[i]^2))
+
+      endfor
+      
+
       print, '    Created'
       print, '    Plotting model...'
-      plot1 = plot(wStandard, fbb, /overplot, color = 'blue', thick = 1.0, name = "Dust Emission")
+      plot1 = plot(wStandard, modelFlux, /overplot, color = 'blue', thick = 1.0, name = "Dust Emission")
       plot2 = plot(wStandard, net, /overplot, color = 'green', thick = 1.0, name = "Photosphere + Dust")
       
       ;Change names fot the save file
       wModel = wStandard
       lflModel = net
-      elflModel = elflStandard
+      elflModel = modelError
       
       ;Update the plot ranges
       ymaximum = maximumInArraysInRange(wModel, lflModel, wStandard, lflStandard, wTarget, lflTarget, thePlot.xrange)
@@ -377,7 +448,7 @@ for smoothType = 0, 1 do begin
       print, '    Saving data...'
       
       ; Save the data
-      save, filename=(outputFile + '_modelParameters.sav'), t, dustnorm, beta, starnorm, wmodel, lflmodel, elflmodel, wTarget, lflTarget, elflTarget, smoothDescription, targetName, targetObservationDate
+      save, filename=(outputFile + '_modelParameters.sav'), t, tError, dustnorm, dustNormError, beta, betaError, starnorm, starNormError, targetScale, targetScaleError, wmodel, lflmodel, elflmodel, wTarget, lflTarget, elflTarget, smoothDescription, targetName, targetObservationDate
       ; Save the plot
       outputFile = outputFile  + "_" + plotTypeString
       thePlot.save, (outputFile + '.pdf'), /close, width = 11, height = 8.5, /Landscape
