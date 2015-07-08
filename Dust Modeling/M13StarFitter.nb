@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[     22817,        644]
-NotebookOptionsPosition[     21318,        590]
-NotebookOutlinePosition[     21692,        607]
-CellTagsIndexPosition[     21649,        604]
+NotebookDataLength[     24769,        687]
+NotebookOptionsPosition[     23270,        633]
+NotebookOutlinePosition[     23643,        650]
+CellTagsIndexPosition[     23600,        647]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -120,7 +120,12 @@ Cell[BoxData[{
    RowBox[{"PlotStyle", "\[Rule]", 
     RowBox[{"{", 
      RowBox[{"Red", ",", " ", "Blue", ",", "Green"}], "}"}]}], ",", " ", 
-   RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}]}], "Input",
+   RowBox[{"PlotRange", "\[Rule]", "All"}], ",", 
+   RowBox[{"PlotLegends", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+     "\"\<Target\>\"", ",", "\"\<Standard\>\"", ",", "\"\<Prism\>\""}], 
+     "}"}]}]}], "]"}]}], "Input",
  CellChangeTimes->{{3.611404508310408*^9, 3.611404542331503*^9}, {
    3.611404622651135*^9, 3.611404642169963*^9}, {3.611405051569931*^9, 
    3.6114050749284286`*^9}, {3.611405107045162*^9, 3.61140517046074*^9}, {
@@ -131,7 +136,7 @@ Cell[BoxData[{
    3.631623218697343*^9, 3.63162326742458*^9}, {3.631623840315887*^9, 
    3.631623863570475*^9}, {3.631625956075284*^9, 3.631626059139868*^9}, {
    3.631800217921418*^9, 3.631800220169179*^9}, {3.631802253326994*^9, 
-   3.631802281861659*^9}}]
+   3.631802281861659*^9}, 3.64531193603966*^9}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -188,14 +193,18 @@ Cell[BoxData[{
     RowBox[{"listStandard", ",", " ", "sdata"}], "}"}], ",", " ", 
    RowBox[{"PlotStyle", "\[Rule]", 
     RowBox[{"{", 
-     RowBox[{"Blue", ",", " ", "Red"}], "}"}]}]}], 
-  "]"}], "\[IndentingNewLine]"}], "Input",
+     RowBox[{"Blue", ",", " ", "Red"}], "}"}]}], ",", 
+   RowBox[{"PlotLegends", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{"\"\<Standard\>\"", ",", "\"\<Smoothed Standard\>\""}], 
+     "}"}]}]}], "]"}], "\[IndentingNewLine]"}], "Input",
  CellChangeTimes->{{3.6114083732084312`*^9, 3.611408487908613*^9}, {
    3.6114085202695217`*^9, 3.611408544171556*^9}, {3.611487641187293*^9, 
    3.611487644488913*^9}, {3.611487798205748*^9, 3.611487894194199*^9}, {
    3.611487979067663*^9, 3.611487979347104*^9}, {3.611488379046636*^9, 
    3.611488450194414*^9}, {3.611488508457905*^9, 3.6114885124964533`*^9}, 
-   3.611490038337232*^9, {3.611495048663801*^9, 3.611495104765286*^9}}],
+   3.611490038337232*^9, {3.611495048663801*^9, 3.611495104765286*^9}, 
+   3.6453119473747063`*^9}],
 
 Cell["Create the interpolating ", "Text",
  CellChangeTimes->{{3.6114968502733097`*^9, 3.611496854175796*^9}}],
@@ -225,7 +234,9 @@ Cell[BoxData[{
       RowBox[{"x", ",", "xmin", ",", "xmax"}], "}"}], ",", " ", 
      RowBox[{"PlotStyle", "\[Rule]", 
       RowBox[{"{", 
-       RowBox[{"Thick", ",", " ", "Green"}], "}"}]}]}], "]"}]}], 
+       RowBox[{"Thick", ",", " ", "Green"}], "}"}]}], ",", 
+     RowBox[{"PlotLegends", "\[Rule]", 
+      RowBox[{"{", "\"\<Standard Function\>\"", "}"}]}]}], "]"}]}], 
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"Show", "[", 
@@ -236,10 +247,15 @@ Cell[BoxData[{
        RowBox[{"listStandard", ",", " ", "sdata"}], "}"}], ",", " ", 
       RowBox[{"PlotStyle", "\[Rule]", 
        RowBox[{"{", 
-        RowBox[{"Blue", ",", " ", "Red"}], "}"}]}]}], "]"}], ",", "sfPlot"}], 
-   "]"}], " "}], "\[IndentingNewLine]"}], "Input",
+        RowBox[{"Blue", ",", " ", "Red"}], "}"}]}], ",", 
+      RowBox[{"PlotLegends", "\[Rule]", 
+       RowBox[{"{", 
+        RowBox[{"\"\<Standard\>\"", ",", "\"\<Smoothed Standard\>\""}], 
+        "}"}]}]}], "]"}], ",", "sfPlot"}], "]"}], 
+  " "}], "\[IndentingNewLine]"}], "Input",
  CellChangeTimes->{{3.6114969525606213`*^9, 3.61149701208722*^9}, {
-  3.622194485714188*^9, 3.622194545220052*^9}}]
+  3.622194485714188*^9, 3.622194545220052*^9}, {3.64531195807769*^9, 
+  3.645311966072466*^9}}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -296,12 +312,16 @@ Cell[BoxData[{
      RowBox[{"listTarget", ",", " ", "tdata"}], "}"}], ",", " ", 
     RowBox[{"PlotStyle", "\[Rule]", 
      RowBox[{"{", 
-      RowBox[{"Blue", ",", " ", "Red"}], "}"}]}]}], "]"}]}]}], "Input",
+      RowBox[{"Blue", ",", " ", "Red"}], "}"}]}], ",", 
+    RowBox[{"PlotLegends", "\[Rule]", 
+     RowBox[{"{", 
+      RowBox[{"\"\<Target\>\"", ",", "\"\<Smoothed Target\>\""}], "}"}]}]}], 
+   "]"}]}]}], "Input",
  CellChangeTimes->{{3.611488521929203*^9, 3.611488577934424*^9}, 
    3.611490038347063*^9, {3.611493836232205*^9, 3.611493850790267*^9}, {
    3.611495120000079*^9, 3.6114951509711123`*^9}, {3.611496513181611*^9, 
    3.611496516538335*^9}, {3.6146119432624397`*^9, 3.614611954336767*^9}, {
-   3.614612349279458*^9, 3.614612367426043*^9}}],
+   3.614612349279458*^9, 3.614612367426043*^9}, 3.645311979324595*^9}],
 
 Cell["Create the interpolating  function", "Text",
  CellChangeTimes->{{3.6114968502733097`*^9, 3.611496854175796*^9}, {
@@ -332,7 +352,9 @@ Cell[BoxData[{
       RowBox[{"x", ",", "xminT", ",", "xmaxT"}], "}"}], ",", " ", 
      RowBox[{"PlotStyle", "\[Rule]", 
       RowBox[{"{", 
-       RowBox[{"Thick", ",", " ", "Green"}], "}"}]}]}], "]"}]}], 
+       RowBox[{"Thick", ",", " ", "Green"}], "}"}]}], ",", 
+     RowBox[{"PlotLegends", "\[Rule]", 
+      RowBox[{"{", "\"\<Target Function\>\"", "}"}]}]}], "]"}]}], 
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"Show", "[", 
@@ -343,11 +365,15 @@ Cell[BoxData[{
        RowBox[{"listTarget", ",", " ", "tdata"}], "}"}], ",", " ", 
       RowBox[{"PlotStyle", "\[Rule]", 
        RowBox[{"{", 
-        RowBox[{"Blue", ",", " ", "Red"}], "}"}]}]}], "]"}], ",", "tfPlot"}], 
-   "]"}], " "}], "\[IndentingNewLine]"}], "Input",
+        RowBox[{"Blue", ",", " ", "Red"}], "}"}]}], ",", 
+      RowBox[{"PlotLegends", "\[Rule]", 
+       RowBox[{"{", 
+        RowBox[{"\"\<Target\>\"", ",", "\"\<Smoothed Target\>\""}], "}"}]}]}],
+      "]"}], ",", "tfPlot"}], "]"}], " "}], "\[IndentingNewLine]"}], "Input",
  CellChangeTimes->{{3.6114969525606213`*^9, 3.61149701208722*^9}, {
   3.622194485714188*^9, 3.622194545220052*^9}, {3.6318004790331287`*^9, 
-  3.6318005334621983`*^9}, {3.631800935405407*^9, 3.631800937204298*^9}}]
+  3.6318005334621983`*^9}, {3.631800935405407*^9, 3.631800937204298*^9}, {
+  3.645311981184141*^9, 3.645311990446279*^9}}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -378,10 +404,14 @@ Cell[BoxData[{
         RowBox[{"s", ",", "x"}], "]"}], ",", 
        RowBox[{"{", 
         RowBox[{"x", ",", "xminT", ",", "xmaxT"}], "}"}], ",", 
-       RowBox[{"PlotStyle", "\[Rule]", "Blue"}]}], "]"}], ",", 
+       RowBox[{"PlotStyle", "\[Rule]", "Blue"}], ",", 
+       RowBox[{"PlotLegends", "\[Rule]", " ", 
+        RowBox[{"{", "\"\<Target\>\"", "}"}]}]}], "]"}], ",", 
      RowBox[{"ListLogLogPlot", "[", 
       RowBox[{"listTargetPrism", ",", 
-       RowBox[{"PlotStyle", "\[Rule]", "Green"}]}], "]"}]}], "]"}], ",", 
+       RowBox[{"PlotStyle", "\[Rule]", "Green"}], ",", 
+       RowBox[{"PlotLegends", "\[Rule]", " ", 
+        RowBox[{"{", "\"\<Prism\>\"", "}"}]}]}], "]"}]}], "]"}], ",", 
    "\[IndentingNewLine]", 
    RowBox[{"{", 
     RowBox[{
@@ -391,7 +421,8 @@ Cell[BoxData[{
  CellChangeTimes->{{3.631800414082323*^9, 3.631800435818303*^9}, {
   3.631800586269294*^9, 3.631800686801918*^9}, {3.6318007239952393`*^9, 
   3.631800774727478*^9}, {3.6318008225831537`*^9, 3.6318008503257303`*^9}, {
-  3.6318008830378838`*^9, 3.631801102143673*^9}}],
+  3.6318008830378838`*^9, 3.631801102143673*^9}, {3.645312009197253*^9, 
+  3.645312017935685*^9}}],
 
 Cell[BoxData[
  RowBox[{"targetScale", "=", "1.058`"}]], "Input",
@@ -447,14 +478,18 @@ Cell[BoxData[
        RowBox[{"PlotStyle", "\[Rule]", 
         RowBox[{"{", 
          RowBox[{"Red", ",", " ", "Thick"}], "}"}]}], ",", " ", 
-       RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}]}], ";", 
+       RowBox[{"PlotRange", "\[Rule]", "All"}], ",", 
+       RowBox[{"PlotLegends", "\[Rule]", 
+        RowBox[{"{", "\"\<Model\>\"", "}"}]}]}], "]"}]}], ";", 
     "\[IndentingNewLine]", 
     RowBox[{"plot2", " ", "=", " ", 
      RowBox[{"ListLogLogPlot", "[", 
       RowBox[{
        RowBox[{"listTarget", "*", "targetScale"}], ",", 
        RowBox[{"PlotStyle", "\[Rule]", "Blue"}], ",", 
-       RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}]}], ";", 
+       RowBox[{"PlotRange", "\[Rule]", "All"}], ",", 
+       RowBox[{"PlotLegends", "\[Rule]", 
+        RowBox[{"{", "\"\<Target\>\"", "}"}]}]}], "]"}]}], ";", 
     "\[IndentingNewLine]", 
     RowBox[{"Show", "[", 
      RowBox[{"plot2", ",", "plot1", ",", 
@@ -493,7 +528,8 @@ Cell[BoxData[
    3.611493324538662*^9}, 3.6114952189459953`*^9, 3.6114952547740183`*^9, 
    3.612523588627466*^9, {3.612523982576618*^9, 3.612523983285956*^9}, {
    3.614612376263019*^9, 3.614612378029676*^9}, {3.622195076819324*^9, 
-   3.622195082578045*^9}, {3.631801172117236*^9, 3.631801175129406*^9}}],
+   3.622195082578045*^9}, {3.631801172117236*^9, 3.631801175129406*^9}, {
+   3.645312044693666*^9, 3.645312057445098*^9}}],
 
 Cell[CellGroupData[{
 
@@ -551,7 +587,9 @@ Cell[BoxData[{
      RowBox[{"PlotStyle", "\[Rule]", 
       RowBox[{"{", 
        RowBox[{"Red", ",", " ", "Thick"}], "}"}]}], ",", 
-     RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}]}], 
+     RowBox[{"PlotRange", "\[Rule]", "All"}], ",", 
+     RowBox[{"PlotLegends", "\[Rule]", 
+      RowBox[{"{", "\"\<Model\>\"", "}"}]}]}], "]"}]}], 
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"plot2", " ", "=", " ", 
@@ -559,7 +597,9 @@ Cell[BoxData[{
     RowBox[{
      RowBox[{"listTarget", "*", "targetScale"}], ",", 
      RowBox[{"PlotStyle", "\[Rule]", "Blue"}], ",", 
-     RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}]}], 
+     RowBox[{"PlotRange", "\[Rule]", "All"}], ",", 
+     RowBox[{"PlotLegends", "\[Rule]", 
+      RowBox[{"{", "\"\<Target\>\"", "}"}]}]}], "]"}]}], 
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"plot3", "=", 
@@ -567,7 +607,9 @@ Cell[BoxData[{
     RowBox[{
      RowBox[{"tdata", "*", "targetScale"}], ",", 
      RowBox[{"PlotStyle", "\[Rule]", "Green"}], ",", 
-     RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}]}], 
+     RowBox[{"PlotRange", "\[Rule]", "All"}], ",", 
+     RowBox[{"PlotLegends", "\[Rule]", 
+      RowBox[{"{", "\"\<Smoothed Target\>\"", "}"}]}]}], "]"}]}], 
   ";"}], "\[IndentingNewLine]", 
  RowBox[{"Show", "[", 
   RowBox[{"plot2", ",", "plot3", ",", "plot1", ",", 
@@ -581,7 +623,8 @@ Cell[BoxData[{
    3.631801184613153*^9, 3.6318011888782454`*^9}, {3.631801265435039*^9, 
    3.63180126560264*^9}, {3.631801448264081*^9, 3.631801453815308*^9}, {
    3.6318014852787743`*^9, 3.6318014929274607`*^9}, {3.631801582907303*^9, 
-   3.631801590147019*^9}, 3.639301399008004*^9}],
+   3.631801590147019*^9}, 3.639301399008004*^9, {3.6453120694832487`*^9, 
+   3.645312084221163*^9}}],
 
 Cell[BoxData[
  RowBox[{"fit", "[", "\"\<ParameterTable\>\"", "]"}]], "Input"]
@@ -589,7 +632,7 @@ Cell[BoxData[
 }, Open  ]]
 },
 WindowSize->{754, 752},
-WindowMargins->{{28, Automatic}, {Automatic, 0}},
+WindowMargins->{{4, Automatic}, {Automatic, 0}},
 ShowSelection->True,
 FrontEndVersion->"10.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (June 27, \
 2014)",
@@ -613,37 +656,37 @@ Cell[1638, 50, 1328, 37, 57, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
 Cell[3003, 92, 96, 1, 64, "Section"],
-Cell[3102, 95, 1735, 38, 114, "Input"]
+Cell[3102, 95, 1919, 43, 131, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[4874, 138, 182, 2, 64, "Section"],
-Cell[5059, 142, 176, 2, 30, "Text"],
-Cell[5238, 146, 1929, 51, 148, "Input"],
-Cell[7170, 199, 109, 1, 30, "Text"],
-Cell[7282, 202, 1484, 39, 148, "Input"]
+Cell[5058, 143, 182, 2, 64, "Section"],
+Cell[5243, 147, 176, 2, 30, "Text"],
+Cell[5422, 151, 2100, 55, 165, "Input"],
+Cell[7525, 208, 109, 1, 30, "Text"],
+Cell[7637, 211, 1792, 46, 165, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[8803, 246, 108, 1, 64, "Section"],
-Cell[8914, 249, 129, 2, 30, "Text"],
-Cell[9046, 253, 1859, 50, 131, "Input"],
-Cell[10908, 305, 169, 2, 30, "Text"],
-Cell[11080, 309, 1575, 40, 148, "Input"]
+Cell[9466, 262, 108, 1, 64, "Section"],
+Cell[9577, 265, 129, 2, 30, "Text"],
+Cell[9709, 269, 2024, 54, 148, "Input"],
+Cell[11736, 325, 169, 2, 30, "Text"],
+Cell[11908, 329, 1872, 46, 165, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[12692, 354, 156, 2, 64, "Section"],
-Cell[12851, 358, 121, 1, 30, "Text"],
-Cell[12975, 361, 1228, 32, 114, "Input"],
-Cell[14206, 395, 132, 2, 28, "Input"]
+Cell[13817, 380, 156, 2, 64, "Section"],
+Cell[13976, 384, 121, 1, 30, "Text"],
+Cell[14100, 387, 1478, 37, 131, "Input"],
+Cell[15581, 426, 132, 2, 28, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[14375, 402, 113, 1, 64, "Section"],
-Cell[14491, 405, 1051, 27, 52, "Input"],
-Cell[15545, 434, 2307, 61, 146, "Input"],
+Cell[15750, 433, 113, 1, 64, "Section"],
+Cell[15866, 436, 1051, 27, 52, "Input"],
+Cell[16920, 465, 2548, 66, 163, "Input"],
 Cell[CellGroupData[{
-Cell[17877, 499, 188, 2, 44, "Subsection"],
-Cell[18068, 503, 1134, 34, 97, "Input"],
-Cell[19205, 539, 2005, 44, 97, "Input"],
-Cell[21213, 585, 77, 1, 28, "Input"]
+Cell[19493, 535, 188, 2, 44, "Subsection"],
+Cell[19684, 539, 1134, 34, 97, "Input"],
+Cell[20821, 575, 2341, 51, 148, "Input"],
+Cell[23165, 628, 77, 1, 28, "Input"]
 }, Open  ]]
 }, Open  ]]
 }
