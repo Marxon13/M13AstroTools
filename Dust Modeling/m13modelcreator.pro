@@ -11,7 +11,7 @@
 ; Astronomy
 ;
 ; CALLING SEQUENCE:
-; m13modelcreator, targetData, standardData, saveFolder, targetName, standardName, targetObservationDate, t, dustnorm, beta, starnorm, TargetScale = targetScale, OMITDATE = omitDate, BOXCARONLY = boxcarOnly, GAUSSIANONLY = gausianOnly, DETAILPLOTONLY = detailPlotOnly, FULLPLOTONLY = fullPlotOnly
+; m13modelcreator, targetData, standardData, saveFolder, targetName, standardName, targetObservationDate, t, dustnorm, beta, starnorm, TargetScale = targetScale, OMITDATE = omitDate, BOXCARONLY = boxcarOnly, GAUSSIANONLY = gausianOnly, DETAILPLOTONLY = detailPlotOnly, FULLPLOTONLY = fullPlotOnly, TERROR = tError, DUSTNORMERROR = dustNormError, BETAERROR = betaError, STARNORMERROR = starNormError, TARGETSCALEERROR = targetScaleError
 ;
 ; INPUTS:
 ; targetData: The fits file that contains the spectral data for the target star. Input is the full file path.
